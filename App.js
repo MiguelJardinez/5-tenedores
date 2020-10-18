@@ -1,13 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+
+import * as firebase from 'firebase';
+
+//import Navegacion
+import Navigation from './src/navigations/Navigation';
+
+//Usamos firebase 
+import { firebaseApp } from './src/utils/firebase';
 
 export default function App() {
+
+  useEffect(() => {
+    
+    firebase.auth().onAuthStateChanged(user => {
+      console.log(user);
+    });
+
+  }, [])
+
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Navigation />
+    </NavigationContainer>
   );
 }
 

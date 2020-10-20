@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 //importando las vistas 
 import Account from '../pages/account/Account';
 import Login from '../pages/account/Login';
+import Register from '../pages/account/Register';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,14 @@ const AcountStack = () => {
         component={Login}
         options={{
           title: 'Iniciar Sesión'
+        }}
+      />
+
+      <Stack.Screen
+        name="register"
+        component={Register}
+        options={{
+          title: 'Registrate'
         }}
       />
 

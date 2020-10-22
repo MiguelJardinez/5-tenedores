@@ -1,27 +1,46 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Input, Icon, Button } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 import { size, isEmpty } from 'lodash';
+import * as firebase from 'firebase';
 
 import { validateEmail } from '../../utils/Validations';
 
-const RegisterForm = () => {
+//componentes
+import Loading from '../Loading';
 
+const RegisterForm = ({ toastRef }) => {
+
+  
   const [ showPassword, setShowPassword ] = useState(true)
   const [ showPasswordRepeat, setShowPasswordRepeat ] = useState(true)
   const [ formData, setFormData ] = useState(defaultFormValue());
+  const [ loading, setLoading] = useState(false)
+  const navigation = useNavigation();
 
   const onSubmit = () => {
     if( isEmpty(formData.email) || isEmpty(formData.password) || isEmpty(formData.repeatPassword)){
-      console.log('Todos los campos son obligatorios');
+      toastRef.current.show('Todos los campos son obligatorios');
     } else if(!validateEmail(formData.email)) {
-      console.log('El correo electronico no es valido');
+      toastRef.current.show('El correo electronico no es valido');
     } else if ( formData.password !== formData.repeatPassword ) {
-      console.log('Las contraseñas no coinciden')
+      toastRef.current.show('Las contraseñas no coinciden')
     } else if ( size(formData.password ) < 6){
-      console.log('La contraseña debe ser mayor a 6 caracteres')
+      toastRef.current.show('La contraseña debe ser mayor a 6 caracteres')
     } else {
-      console.log('okey')
+      setLoading(true);
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword( formData.email, formData.password )
+        .then( () => {
+          setLoading(false);
+          navigation.navigate("accountStack");
+        })
+        .catch( () => {
+          setLoading(false)
+          toastRef.current.show('El usuario ya existe pruebe con otro')
+        })
     }
     
   }
@@ -83,6 +102,7 @@ const RegisterForm = () => {
         buttonStyle={styles.btnRegister}
         onPress={onSubmit}
       />
+      <Loading isVisible={loading} text='Creando cuenta'/>
     </View>
   )
 }

@@ -14,7 +14,7 @@ const AcountStack = () => {
     <Stack.Navigator>
 
       <Stack.Screen
-        name="restaurant"
+        name="accountStack"
         component={Account}
         options={{
           title: 'Cuenta'

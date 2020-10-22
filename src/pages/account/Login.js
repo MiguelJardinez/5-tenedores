@@ -1,24 +1,39 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import { Divider } from 'react-native-elements';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Toast from 'react-native-easy-toast';
 import { useNavigation } from '@react-navigation/native'
+
+//Componentes
+import LoginForm from '../../components/account/LoginForm';
 
 const Login = () => {
 
+  const toastRef = useRef();
+
   return (
-    <ScrollView>
+    <KeyboardAwareScrollView>
       <Image 
         source={ require('../../../assets/img/logo.png')}
         resizeMode="contain"
         style={styles.logo}
         />
       <View style={styles.viewContainer}>
-        <Text>Login form</Text>
-        <CreateAccount />
+        <View>
+          <LoginForm style={styles.viewForm} toastRef={toastRef} />
+          <CreateAccount />
+        </View>
+        <Divider style={styles.divider}/>
+        <Text>Social Login</Text>
       </View>
-      <Divider style={styles.divider}/>
-      <Text>Social Login</Text>
-    </ScrollView>
+      <Toast 
+        ref={toastRef}
+        position="center"
+        opacity={0.9}
+        useNativeDriver={false}
+      />
+    </KeyboardAwareScrollView>
   )
 }
 export default Login
@@ -45,10 +60,12 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     marginHorizontal: 40,
+    marginVertical: 50
   },
   textRegister: {
     marginTop: 15,
     marginHorizontal: 10,
+    textAlign: 'center',
   },
   btnRegister: {
     fontWeight: 'bold',
